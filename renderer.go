@@ -117,7 +117,7 @@ func (r *renderer) renderStep(s *messages.Step, last bool) {
 		s.Text += "."
 	}
 
-	text := strings.ReplaceAll(s.Text, "<", `\<`)
+	text := strings.ReplaceAll(s.Text, "<", `&lt;`)
 
 	r.writeLine("_" + strings.TrimSpace(s.Keyword) + "_ " + text)
 
@@ -171,6 +171,22 @@ func (r renderer) renderExampleTable(h *messages.TableRow, rs []*messages.TableR
 
 func (r renderer) renderDataTable(t *messages.DataTable) {
 	ws := r.getCellWidths(t.Rows)
+
+	s := "|"
+
+	for _, w := range ws {
+		s += strings.Repeat(" ", w+2) + "|"
+	}
+
+	r.writeLine(s)
+
+	s = "|"
+
+	for _, w := range ws {
+		s += strings.Repeat("-", w+2) + "|"
+	}
+
+	r.writeLine(s)
 
 	for _, t := range t.Rows {
 		r.renderCells(t.Cells, ws)
